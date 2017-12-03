@@ -11,11 +11,11 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by desert on 2017/12/3
  */
 
-public class Points extends OpenGLUtils {
+public class Lines extends OpenGLUtils {
     private IntBuffer verBuffer, colorBuffer;
     private ByteBuffer indBuffer;
 
-    public Points() {
+    public Lines() {
         init();
     }
 
@@ -62,8 +62,8 @@ public class Points extends OpenGLUtils {
                 GL10.GL_FIXED,//数据类型
                 0,//连续顶点坐标数据的间隔
                 colorBuffer);//顶点颜色数据缓冲
-        gl.glPointSize(20);//设置绘制顶点的大小
-        gl.glDrawElements(GL10.GL_POINTS,//绘制模型（点/线/三角形）
+        gl.glLineWidth(5);//设置线的宽度
+        gl.glDrawElements(GL10.GL_LINE_LOOP,//绘制模型（点/线/三角形）
                 4,//顶点个数
                 GL10.GL_UNSIGNED_BYTE,//数据类型
                 indBuffer);//索引缓冲

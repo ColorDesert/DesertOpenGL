@@ -5,7 +5,13 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
+import com.desert.desertopengl.Circle;
+import com.desert.desertopengl.CopperCash;
+import com.desert.desertopengl.CopperCashLine;
+import com.desert.desertopengl.Lines;
 import com.desert.desertopengl.Points;
+import com.desert.desertopengl.StripTriangles;
+import com.desert.desertopengl.Triangles;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -32,10 +38,10 @@ public class EGLView extends GLSurfaceView {
         //设置渲染器
         setRenderer(new EGLRenderer());
         //设置渲染模式
-        //RENDERMODE_CONTINUOUSLY //连续不断的刷新
-        //RENDERMODE_WHEN_DIRTY //被动的刷新  需要用户主动去调用
-        setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-        //requestRender();
+        //RENDERMODE_CONTINUOUSLY //连续不断的刷新  消耗性能
+        //RENDERMODE_WHEN_DIRTY //被动的刷新  需要用户主动去调用  requestRender();
+        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        requestRender();
     }
 
     class EGLRenderer implements GLSurfaceView.Renderer {
@@ -46,8 +52,8 @@ public class EGLView extends GLSurfaceView {
             gl10.glDisable(GL10.GL_DITHER);//关闭
             //设置Hint模式(设置快速模式)
             gl10.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FALSE);
-            //用黑色清除屏幕
-            gl10.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            //用白色清除屏幕
+            gl10.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             //开启深度测试
             gl10.glEnable(GL10.GL_DEPTH_TEST);
 
@@ -62,11 +68,17 @@ public class EGLView extends GLSurfaceView {
             gl10.glLoadIdentity();
             //设置视角大小
             float r = (float) width / height;
-            gl10.glFrustumf(-r, r, -1, 1, 1, 10);
+            gl10.glFrustumf(-r, r, -1, 1, 1, 20);
 
         }
 
         Points points = new Points();
+        Lines mLines = new Lines();
+        Triangles mTriangles = new Triangles();
+        StripTriangles mStripTriangles = new StripTriangles();
+        Circle mCircle = new Circle();
+        CopperCashLine mCopperCashLine = new CopperCashLine();
+        CopperCash mCopperCash=new CopperCash();
 
         @Override
         public void onDrawFrame(GL10 gl10) {
@@ -77,7 +89,12 @@ public class EGLView extends GLSurfaceView {
             gl10.glLoadIdentity();
             //平移
             gl10.glTranslatef(0, 0, -3.0f);
-            points.drawSelf(gl10);
+            // points.drawSelf(gl10);
+            // mLines.drawSelf(gl10);
+            // mTriangles.drawSelf(gl10);
+//            mStripTriangles.drawSelf(gl10);
+//            mCircle.drawSelf(gl10);
+            mCopperCash.drawSelf(gl10);
         }
     }
 }
