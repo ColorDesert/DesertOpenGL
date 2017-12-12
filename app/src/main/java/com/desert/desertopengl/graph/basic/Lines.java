@@ -1,4 +1,4 @@
-package com.desert.desertopengl;
+package com.desert.desertopengl.graph.basic;
 
 import com.desert.desertopengl.utils.OpenGLUtils;
 
@@ -14,12 +14,13 @@ import javax.microedition.khronos.opengles.GL10;
 public class Lines extends OpenGLUtils {
     private IntBuffer verBuffer, colorBuffer;
     private ByteBuffer indBuffer;
+    private int mode;
 
     public Lines() {
-        init();
+        initData();
     }
 
-    private void init() {
+    private void initData() {
         //定点个数
         int UNIT_SIZE = 10000;//缩放比列
         //顶点数据
@@ -63,11 +64,15 @@ public class Lines extends OpenGLUtils {
                 0,//连续顶点坐标数据的间隔
                 colorBuffer);//顶点颜色数据缓冲
         gl.glLineWidth(5);//设置线的宽度
-        gl.glDrawElements(GL10.GL_LINE_LOOP,//绘制模型（点/线/三角形）
+        gl.glDrawElements(mode,//绘制模型（点/线/三角形）
                 4,//顶点个数
                 GL10.GL_UNSIGNED_BYTE,//数据类型
                 indBuffer);//索引缓冲
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 }

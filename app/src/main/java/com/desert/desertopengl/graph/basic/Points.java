@@ -1,4 +1,4 @@
-package com.desert.desertopengl;
+package com.desert.desertopengl.graph.basic;
 
 import com.desert.desertopengl.utils.OpenGLUtils;
 

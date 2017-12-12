@@ -1,17 +1,11 @@
 package com.desert.desertopengl.view;
 
 import android.content.Context;
-import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
 
-import com.desert.desertopengl.Circle;
-import com.desert.desertopengl.CopperCash;
-import com.desert.desertopengl.CopperCashLine;
-import com.desert.desertopengl.Lines;
-import com.desert.desertopengl.Points;
-import com.desert.desertopengl.StripTriangles;
-import com.desert.desertopengl.Triangles;
+import com.desert.desertopengl.interfaces.IDrawBasicPel;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -20,16 +14,25 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by desert on 2017/11/27
  */
 
-public class EGLView extends GLSurfaceView {
+public class BasicGLView extends GLSurfaceView {
     private static final String TAG = "EGLView";
+    private IDrawBasicPel mIDrawBasicPel;
 
-    public EGLView(Context context) {
+    public BasicGLView(Context context) {
         this(context, null);
     }
 
-    public EGLView(Context context, AttributeSet attrs) {
+    public BasicGLView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+    }
+
+    public IDrawBasicPel getIDrawBasicPel() {
+        return mIDrawBasicPel;
+    }
+
+    public void setIDrawBasicPel(IDrawBasicPel IDrawBasicPel) {
+        mIDrawBasicPel = IDrawBasicPel;
     }
 
     private void init() {
@@ -48,6 +51,7 @@ public class EGLView extends GLSurfaceView {
 
         @Override
         public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
+            Log.d(TAG, "onSurfaceCreated");
             //关闭抗抖动（对于可用颜色较少的系统，可以牺牲分辨率，通过颜色抖动来增加的颜色数量）
             gl10.glDisable(GL10.GL_DITHER);//关闭
             //设置Hint模式(设置快速模式)
@@ -60,41 +64,32 @@ public class EGLView extends GLSurfaceView {
         }
 
         @Override
-        public void onSurfaceChanged(GL10 gl10, int width, int height) {
+        public void onSurfaceChanged(GL10 gl, int width, int height) {
+            Log.d(TAG, "onSurfaceChanged");
             //设置视口大小
-            GLES20.glViewport(0, 0, width, height);
+            gl.glViewport(0, 0, width, height);
             //设置投影矩阵
-            gl10.glMatrixMode(GL10.GL_PROJECTION);
-            gl10.glLoadIdentity();
+            gl.glMatrixMode(GL10.GL_PROJECTION);
+            gl.glLoadIdentity();
             //设置视角大小
             float r = (float) width / height;
-            gl10.glFrustumf(-r, r, -1, 1, 1, 20);
+            gl.glFrustumf(-r, r, -1, 1, 1, 20);
 
         }
 
-        Points points = new Points();
-        Lines mLines = new Lines();
-        Triangles mTriangles = new Triangles();
-        StripTriangles mStripTriangles = new StripTriangles();
-        Circle mCircle = new Circle();
-        CopperCashLine mCopperCashLine = new CopperCashLine();
-        CopperCash mCopperCash=new CopperCash();
-
         @Override
-        public void onDrawFrame(GL10 gl10) {
+        public void onDrawFrame(GL10 gl) {
+            Log.d(TAG, "onDrawFrame");
             //清除颜色缓存和深度缓存
-            gl10.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
             //设置模型矩阵
-            gl10.glMatrixMode(GL10.GL_MODELVIEW);
-            gl10.glLoadIdentity();
+            gl.glMatrixMode(GL10.GL_MODELVIEW);
+            gl.glLoadIdentity();
             //平移
-            gl10.glTranslatef(0, 0, -3.0f);
-            // points.drawSelf(gl10);
-            // mLines.drawSelf(gl10);
-            // mTriangles.drawSelf(gl10);
-//            mStripTriangles.drawSelf(gl10);
-//            mCircle.drawSelf(gl10);
-            mCopperCash.drawSelf(gl10);
+            gl.glTranslatef(0, 0, -3.0f);
+            if (mIDrawBasicPel != null) {
+                mIDrawBasicPel.drawSelf(gl);
+            }
         }
     }
 }

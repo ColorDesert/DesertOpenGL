@@ -1,20 +1,21 @@
 package com.desert.desertopengl;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.desert.desertopengl.view.EGLView;
+import com.desert.desertopengl.view.GLSLView;
 
 
 public class MainActivity extends AppCompatActivity {
-    private EGLView mEGLView;
+    //private EGLView mEGLView;
+    private GLSLView mEGLView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mEGLView=new EGLView(this);
-        setContentView(R.layout.activity_main);
-        mEGLView = findViewById(R.id.view);
+        mEGLView=new GLSLView(this);
+        setContentView(mEGLView);
+        //mEGLView = findViewById(R.id.view);
     }
 
     @Override

@@ -24,7 +24,8 @@ public class CopperCash extends OpenGLUtils {
         //角度
         int angle = 1;
         //顶点个数
-        vCount = 2 * (360 / angle + 1);//(1:最后一个是重复点)
+        //(1:最后一个是重复点)
+        vCount = 2 * (360 / angle + 1);
         //顶点数据
         float ver[] = new float[3 * vCount];
         int count = 0;
@@ -42,24 +43,31 @@ public class CopperCash extends OpenGLUtils {
             // j=180 实际上是225角度
             // j=270 实际上是315角度
             //上面四个点是正方形的四个顶点
-            if (j == 0 || j == 90 || j == 180 || j == 270) {//四个顶点的位置
+            //四个顶点的位置
+            if (j == 0 || j == 90 || j == 180 || j == 270) {
                 switch (j) {
-                    case 0://右上角
+                    //右上角
+                    case 0:
                         ver[count++] = sLength;
                         ver[count++] = sLength;
                         break;
-                    case 90://左上角
+                    //左上角
+                    case 90:
                         ver[count++] = -sLength;
                         ver[count++] = sLength;
                         break;
-                    case 180://左下角
+                    //左下角
+                    case 180:
                         ver[count++] = -sLength;
                         ver[count++] = -sLength;
                         break;
-                    case 270://右下角
+                        //右下角
+                    case 270:
                         ver[count++] = sLength;
                         ver[count++] = -sLength;
                         break;
+                        default:
+                            break;
                 }
             } else if (j < 90) {
                 if (j < 45) {
@@ -116,105 +124,6 @@ public class CopperCash extends OpenGLUtils {
         //创建顶点颜色缓冲数据
         colorBuffer = getIntBuffer(color);
     }
-
-//    private void init() {
-//        //角度
-//        int angle = 1;
-//        //顶点个数
-//        vCount = 2 * (360 / angle + 1);//(1:最后一个是重复点)
-//        //顶点数据
-//        float ver[] = new float[3 * vCount];
-//        int count = 0;
-//        int r = 2;
-//        //正方形的边长的一半
-//        float sLength = 0.5f * (float) (r * Math.cos(45));
-//        int j;
-//        for (int i = 0; i < 360 + angle; i += angle) {
-//            ver[count++] = (float) (Math.cos(i) * r);
-//            ver[count++] = (float) (Math.sin(i) * r);
-//            ver[count++] = 0;
-//            j = i % 360;
-//            //Math.cos(Math.toRadians(i)) - Math.sin(Math.toRadians(i)
-//            // j=0 实际上是45角度
-//            // j=90 实际上是135角度
-//            // j=180 实际上是225角度
-//            // j=270 实际上是315角度
-//            //上面四个点是正方形的四个顶点
-//            if (j == 45 || j == 135 || j == 225 || j == 315) {//四个顶点的位置
-//                switch (j) {
-//                    case 45://右上角
-//                        ver[count++] = sLength;
-//                        ver[count++] = sLength;
-//                        break;
-//                    case 135://左上角
-//                        ver[count++] = -sLength;
-//                        ver[count++] = sLength;
-//                        break;
-//                    case 225://左下角
-//                        ver[count++] = -sLength;
-//                        ver[count++] = -sLength;
-//                        break;
-//                    case 315://右下角
-//                        ver[count++] = sLength;
-//                        ver[count++] = -sLength;
-//                        break;
-//                }
-//            } else if (j < 45) {
-//                ver[count++] = sLength;
-//                if (j == 0) {
-//                    ver[count++] = 0;
-//                } else {
-//                    ver[count++] = (j % 45) * sLength / 45;
-//                }
-//            } else if (j < 135) {
-//                if (j < 90) {
-//                    ver[count++] = (45 - j % 45) * sLength / 45;
-//                } else if (j == 90) {
-//                    ver[count++] = 0;
-//                } else {
-//                    ver[count++] = -(j % 45) * sLength / 45;
-//                }
-//                ver[count++] = sLength;
-//            } else if (j < 225) {
-//                ver[count++] = -sLength;
-//                if (j < 180) {
-//                    ver[count++] = (45 - j % 45) * sLength / 45;
-//                } else if (j == 180) {
-//                    ver[count++] = 0;
-//                } else {
-//                    ver[count++] = -(j % 45) * sLength / 45;
-//                }
-//            } else if (j < 315) {
-//                if (j < 270) {
-//                    ver[count++] = -(45 - j % 45) * sLength / 45;
-//                } else if (j == 270) {
-//                    ver[count++] = 0;
-//                } else {
-//                    ver[count++] = (j % 45) * sLength / 45;
-//                }
-//                ver[count++] = -sLength;
-//            } else if (j < 360) {
-//                ver[count++] = sLength;
-//                ver[count++] = -(45 - j % 45) * sLength / 45;
-//            }
-//            ver[count++] = 0;
-//        }
-//        //创建顶点缓冲数据
-//        verBuffer = getFloatBuffer(ver);
-//        //顶点颜色
-//        int one = 65535;//支持65535色彩通道
-//        //顶点颜色数据
-//        count = 0;
-//        int[] color = new int[4 * vCount];
-//        for (int i = 0; i < vCount; i++) {
-//            color[count++] = one;
-//            color[count++] = 0;
-//            color[count++] = 0;
-//            color[count++] = 0;
-//        }
-//        //创建顶点颜色缓冲数据
-//        colorBuffer = getIntBuffer(color);
-//    }
 
     public void drawSelf(GL10 gl) {
         //开启顶点坐标数组
