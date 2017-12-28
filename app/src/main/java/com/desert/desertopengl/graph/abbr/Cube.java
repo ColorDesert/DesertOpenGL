@@ -1,8 +1,10 @@
-package com.desert.desertopengl.utils;
+package com.desert.desertopengl.graph.abbr;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.view.View;
+
+import com.desert.desertopengl.utils.ShaderUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -15,12 +17,12 @@ public class Cube extends ShaderUtil {
 
     private FloatBuffer verBuffer, colorBuffer;
     private ByteBuffer indexBuffer;
-    private View mView;
+    private Context mContext;
     private int mProgram, aPosition, aColor, uMVPMatrix;
     private int angle = 0;
 
-    public Cube(View view) {
-        mView = view;
+    public Cube(Context context) {
+        mContext = context;
         initData();
         initShader();
     }
@@ -62,8 +64,8 @@ public class Cube extends ShaderUtil {
     }
 
     private void initShader() {
-        String verSource = loadFromAssetsFile("ver.glsl", mView.getResources());
-        String fragSource = loadFromAssetsFile("frag.glsl", mView.getResources());
+        String verSource = loadFromAssetsFile("ver.glsl", mContext.getResources());
+        String fragSource = loadFromAssetsFile("frag.glsl", mContext.getResources());
         mProgram = createProgram(verSource, fragSource);
         //获取程序（着色器）中顶点位置（XYZ 引用的id）
         aPosition = GLES20.glGetAttribLocation(mProgram, "aPosition");
@@ -78,7 +80,7 @@ public class Cube extends ShaderUtil {
         GLES20.glUseProgram(mProgram);
         //设置变化矩阵（旋转）
         //Matrix.setRotateM(mChangeMatrix, 0, 0, 0, 1, 0);
-        Matrix.translateM(mChangeMatrix, 0, 0, 0, 1);
+        Matrix.translateM(mChangeMatrix, 0, 0, 0, -5);
         Matrix.setRotateM(mChangeMatrix, 0, angle, 1, 1, 1);
 
         //给着色器传变量值

@@ -9,4 +9,8 @@ public class Constants {
     public static final int BASIC_PEL_POINT = 2001;
     public static final int BASIC_PEL_LINE = 2002;
     public static final int BASIC_PEL_TRIANGLE = 2003;
+    public static final int THREE_DIMENSIONAL_CUBE = 2004;
+    public static final int THREE_DIMENSIONAl_CYLINDER = 2005;
+    public static final int THREE_DIMENSIONAL_CONE = 2006;
+    public static final int THREE_DIMENSIONAL_EARTH = 2007;
 }

@@ -13,5 +13,5 @@ void main(){
  gl_Position=uMVPMatrix*vec4(aPosition,1);
  vec3 pos=vec3(10.0,10.0,10.0);
  vec4 at=vec4(1.0,1.0,1.0,1.0);
- vDiffuse=pointLight(normalize(aPosition),pos,at);
+ //vDiffuse=pointLight(normalize(aPosition),pos,at);
 }

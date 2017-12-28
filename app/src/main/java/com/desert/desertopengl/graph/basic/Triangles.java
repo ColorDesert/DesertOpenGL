@@ -1,4 +1,4 @@
-package com.desert.desertopengl;
+package com.desert.desertopengl.graph.basic;
 
 import com.desert.desertopengl.utils.OpenGLUtils;
 
@@ -46,7 +46,7 @@ public class Triangles extends OpenGLUtils {
         count = 0;
         int[] color = new int[4 * vCount];
         for (int i = 0; i < vCount; i++) {
-            color[count++] = one;
+            color[count++] = 456;
             color[count++] = 79;
             color[count++] = 30;
             color[count++] = 0;

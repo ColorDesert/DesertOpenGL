@@ -1,8 +1,10 @@
-package com.desert.desertopengl.utils;
+package com.desert.desertopengl.graph.abbr;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.view.View;
+
+import com.desert.desertopengl.utils.ShaderUtil;
 
 import java.nio.FloatBuffer;
 import java.util.Random;
@@ -14,13 +16,13 @@ import java.util.Random;
 public class Cone extends ShaderUtil {
 
     private FloatBuffer verBuffer, colorBuffer, bottomVerBuffer, topVerBuffer;
-    private View mView;
+    private Context mContext;
     private int mProgram, aPosition, aColor, uMVPMatrix;
     private int angle = 0;
     private int vCount;
 
-    public Cone(View view) {
-        mView = view;
+    public Cone(Context context) {
+        mContext = context;
         initData();
         initShader();
     }
@@ -65,8 +67,8 @@ public class Cone extends ShaderUtil {
     }
 
     private void initShader() {
-        String verSource = loadFromAssetsFile("ver.glsl", mView.getResources());
-        String fragSource = loadFromAssetsFile("frag.glsl", mView.getResources());
+        String verSource = loadFromAssetsFile("ver.glsl", mContext.getResources());
+        String fragSource = loadFromAssetsFile("frag.glsl", mContext.getResources());
         mProgram = createProgram(verSource, fragSource);
         //获取程序（着色器）中顶点位置（XYZ 引用的id）
         aPosition = GLES20.glGetAttribLocation(mProgram, "aPosition");

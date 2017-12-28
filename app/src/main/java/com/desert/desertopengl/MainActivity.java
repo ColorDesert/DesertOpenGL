@@ -3,17 +3,17 @@ package com.desert.desertopengl;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.desert.desertopengl.view.GLSLView;
+import com.desert.desertopengl.view.GLView;
 
 
 public class MainActivity extends AppCompatActivity {
     //private EGLView mEGLView;
-    private GLSLView mEGLView;
+    private GLView mEGLView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mEGLView=new GLSLView(this);
+        mEGLView=new GLView(this);
         setContentView(mEGLView);
         //mEGLView = findViewById(R.id.view);
     }

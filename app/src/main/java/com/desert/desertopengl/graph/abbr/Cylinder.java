@@ -1,8 +1,10 @@
-package com.desert.desertopengl.utils;
+package com.desert.desertopengl.graph.abbr;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.view.View;
+
+import com.desert.desertopengl.utils.ShaderUtil;
 
 import java.nio.FloatBuffer;
 import java.util.Random;
@@ -14,13 +16,13 @@ import java.util.Random;
 public class Cylinder extends ShaderUtil {
 
     private FloatBuffer verBuffer, colorBuffer, buttomVerBuffer, topVerBuffer;
-    private View mView;
     private int mProgram, aPosition, aColor, uMVPMatrix;
     private int angle = 0;
     private int vCount;
+    private Context mContext;
 
-    public Cylinder(View view) {
-        mView = view;
+    public Cylinder(Context context) {
+        mContext = context;
         initData();
         initShader();
     }
@@ -82,8 +84,8 @@ public class Cylinder extends ShaderUtil {
     }
 
     private void initShader() {
-        String verSource = loadFromAssetsFile("ver.glsl", mView.getResources());
-        String fragSource = loadFromAssetsFile("frag.glsl", mView.getResources());
+        String verSource = loadFromAssetsFile("ver.glsl", mContext.getResources());
+        String fragSource = loadFromAssetsFile("frag.glsl", mContext.getResources());
         mProgram = createProgram(verSource, fragSource);
         //获取程序（着色器）中顶点位置（XYZ 引用的id）
         aPosition = GLES20.glGetAttribLocation(mProgram, "aPosition");
@@ -92,15 +94,6 @@ public class Cylinder extends ShaderUtil {
         //获取程序（着色器） 总变换矩阵的id
         uMVPMatrix = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
     }
-
-    //4*4的投影矩阵
-    public static float[] mProMatrix = new float[16];
-    //4*4的相机矩阵
-    public static float[] mCameraMatrix = new float[16];
-    //总变换矩阵
-    public static float[] mMVPMatrix;
-    //变换矩阵（旋转、平移、缩放）
-    public static float[] mChangeMatrix = new float[16];
 
     public float[] getMatrix(float[] spec) {
         mMVPMatrix = new float[16];

@@ -4,10 +4,13 @@ import android.opengl.GLES20;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.desert.desertopengl.constant.Constants;
+import com.desert.desertopengl.graph.basic.Triangles;
 import com.desert.desertopengl.graph.basic.Lines;
 import com.desert.desertopengl.graph.basic.Points;
 import com.desert.desertopengl.interfaces.IDrawBasicPel;
@@ -28,20 +31,22 @@ public class BasicPelActivity extends AppCompatActivity implements IDrawBasicPel
     private RadioButton mRbTypeOne;
     private RadioButton mRbTypeTwo;
     private RadioButton mRbTypeThree;
+    private RadioGroup mRgType;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic_pel);
         mBasicGLView = findViewById(R.id.basicGLView);
-        mBasicGLView.setIDrawBasicPel(this);
-        RadioGroup radioGroup = findViewById(R.id.rg);
-        radioGroup.setOnCheckedChangeListener(this);
+        mRgType = findViewById(R.id.rg);
+        mRgType.setOnCheckedChangeListener(this);
+        RadioGroup rgPel = findViewById(R.id.rg_pel);
+        rgPel.setOnCheckedChangeListener(this);
         mRbTypeOne = findViewById(R.id.type_one);
         mRbTypeTwo = findViewById(R.id.type_two);
         mRbTypeThree = findViewById(R.id.type_three);
-        mRbTypeOne.setChecked(true);
-        initData();
+        ((RadioButton) findViewById(R.id.rb_point)).setChecked(true);
+        mBasicGLView.setIDrawBasicPel(this);
     }
 
     private void initData() {
@@ -102,6 +107,43 @@ public class BasicPelActivity extends AppCompatActivity implements IDrawBasicPel
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+        Log.e("dxf", "checkedId=" + checkedId);
+
+        switch (checkedId) {
+            case R.id.rb_point:
+                Log.e("dxf", "rb_point");
+                mRgType.setVisibility(View.GONE);
+                if (mPoints == null) {
+                    mPoints = new Points();
+                }
+                mPelType = Constants.BASIC_PEL_POINT;
+                mRbTypeOne.setChecked(true);
+                break;
+            case R.id.rb_triangle:
+                mRgType.setVisibility(View.VISIBLE);
+                if (mLines == null) {
+                    mLines = new Lines();
+                }
+                mRbTypeOne.setText("GL_LINES");
+                mRbTypeTwo.setText("GL_LINE_STRIP");
+                mRbTypeThree.setText("GL_LINE_LOOP");
+                mLines.setMode(GLES20.GL_LINES);
+                mPelType = Constants.BASIC_PEL_LINE;
+                mRbTypeOne.setChecked(true);
+                break;
+            case R.id.rb_circle:
+                mRgType.setVisibility(View.VISIBLE);
+                if (mTriangles == null) {
+                    mTriangles = new Triangles();
+                }
+                mRbTypeOne.setText("GL_TRIANGLES");
+                mRbTypeTwo.setText("GL_TRIANGLE_STRIP");
+                mRbTypeThree.setText("GL_TRIANGLE_FAN");
+                mTriangles.setMode(GLES20.GL_TRIANGLES);
+                mPelType = Constants.BASIC_PEL_TRIANGLE;
+                mRbTypeOne.setChecked(true);
+                break;
+        }
         if (checkedId == R.id.type_one) {
             switch (mPelType) {
                 case Constants.BASIC_PEL_LINE:

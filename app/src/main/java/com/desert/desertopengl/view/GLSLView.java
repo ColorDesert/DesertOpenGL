@@ -5,10 +5,10 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.util.AttributeSet;
+import android.util.Log;
 
-import com.desert.desertopengl.utils.Cone;
-import com.desert.desertopengl.utils.Cube;
-import com.desert.desertopengl.utils.Cylinder;
+import com.desert.desertopengl.graph.abbr.Cube;
+import com.desert.desertopengl.interfaces.IDrawAbbr;
 import com.desert.desertopengl.utils.GLSLTriangles;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -20,6 +20,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class GLSLView extends GLSurfaceView {
     private static final String TAG = "SEGLView";
+    private IDrawAbbr mIDrawAbbr;
+    private Cube mCube;
 
     public GLSLView(Context context) {
         this(context, null);
@@ -28,6 +30,14 @@ public class GLSLView extends GLSurfaceView {
     public GLSLView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+    }
+
+    public IDrawAbbr getIDrawAbbr() {
+        return mIDrawAbbr;
+    }
+
+    public void setIDrawAbbr(IDrawAbbr IDrawAbbr) {
+        mIDrawAbbr = IDrawAbbr;
     }
 
     private void init() {
@@ -43,10 +53,7 @@ public class GLSLView extends GLSurfaceView {
 
     class EGLRenderer implements Renderer {
         private GLSLTriangles mGLSLTriangles;
-        private Cylinder mCylinder;
-        private Cube mCube;
-        private Cone mCone;
-        private GLSLView mGLSLView;
+private GLSLView mGLSLView;
 
         public EGLRenderer(GLSLView GLSLView) {
             mGLSLView = GLSLView;
@@ -59,16 +66,13 @@ public class GLSLView extends GLSurfaceView {
             //设置Hint模式(设置快速模式)
             // GLES20.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_FALSE);
             //用白色清除屏幕
-            GLES20.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            GLES20.glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
             //开启深度测试
             GLES20.glEnable(GL10.GL_DEPTH_TEST);
-            //mGLSLTriangles=new GLSLTriangles(mGLSLView);
-            //mCube = new Cube(mGLSLView);
-            mCone = new Cone(mGLSLView);
-//设置逆时针方法为面的"前面"
-//            GLES20.glFrontFace(GL10.GL_CCW);
-//            GLES20.glEnable(GL10.GL_CULL_FACE);
-//            GLES20.glCullFace(GL10.GL_FRONT);
+            if (mIDrawAbbr != null) {
+                mIDrawAbbr.onSurfaceCreated();
+            }
+            mCube=new Cube(mGLSLView.getContext());
         }
 
         @Override
@@ -78,18 +82,22 @@ public class GLSLView extends GLSurfaceView {
             //设置视角大小
             float r = (float) width / height;
             //设置投影矩阵
-            Matrix.frustumM(Cone.mProMatrix, 0, -r, r, -1, 1, 3, 20);
+            Matrix.frustumM(mCube.mProMatrix, 0, -r, r, -1, 1, 1, 10);
             //设置照相机位置
-            Matrix.setLookAtM(Cone.mCameraMatrix, 0, 0, 0, 10, 0, 0, 0, 0, 1, 0);
+            Matrix.setLookAtM(mCube.mCameraMatrix, 0, 0, 0, 6, 0, 0, 0, 0, 1, 0);
             //之前是设置投影矩阵然后设置单位矩阵
 
         }
 
         @Override
-        public void onDrawFrame(GL10 gl10) {
+        public void onDrawFrame(GL10 gl) {
+            Log.e("dxf", "onDrawFrame");
             //清除颜色缓存和深度缓存
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-            mCone.drawSelf();
+//            if (mIDrawAbbr != null) {
+//                mIDrawAbbr.drawSelf();
+//            }
+            mCube.drawSelf();
         }
     }
 }

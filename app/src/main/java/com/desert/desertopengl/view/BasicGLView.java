@@ -44,7 +44,6 @@ public class BasicGLView extends GLSurfaceView {
         //RENDERMODE_CONTINUOUSLY //连续不断的刷新  消耗性能
         //RENDERMODE_WHEN_DIRTY //被动的刷新  需要用户主动去调用  requestRender();
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        requestRender();
     }
 
     class EGLRenderer implements GLSurfaceView.Renderer {

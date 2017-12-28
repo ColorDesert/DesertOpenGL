@@ -12,9 +12,35 @@
         />
 
     <RadioGroup
+        android:id="@+id/rg_pel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp">
+
+        <RadioButton
+            android:id="@+id/rb_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Points"/>
+
+        <RadioButton
+            android:id="@+id/rb_triangle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Triangle"/>
+
+        <RadioButton
+            android:id="@+id/rb_circle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Circle"/>
+    </RadioGroup>
+
+    <RadioGroup
         android:id="@+id/rg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/rg_pel">
 
         <RadioButton
             android:id="@+id/type_one"
