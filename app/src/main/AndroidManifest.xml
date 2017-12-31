@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AbbrActivity"
+        <activity android:name=".BasicActivity"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -17,11 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--<activity android:name=".AbbrActivity"-->
-                  <!--android:theme="@style/Theme.AppCompat.Light.NoActionBar"-->
-            <!--/>-->
-        <!--<activity android:name=".BasicActivity"/>-->
-        <!--<activity android:name=".BasicPelActivity"/>-->
+        <activity android:name=".BasicPelActivity"/>
+        <activity android:name=".TwoDimenActivity"/>
+        <activity android:name=".ThreeDimenActivity"/>
+        <activity android:name=".ObjActivity"/>
     </application>
 
 </manifest>

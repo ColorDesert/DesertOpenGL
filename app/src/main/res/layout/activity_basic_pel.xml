@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/view"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:title="基本图元"
+        app:popupTheme="?attr/actionBarPopupTheme"/>
 
     <com.desert.desertopengl.view.BasicGLView
         android:id="@+id/basicGLView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
         />
 
     <RadioGroup
         android:id="@+id/rg_pel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
         android:layout_marginRight="10dp">
 
         <RadioButton
@@ -40,6 +52,7 @@
         android:id="@+id/rg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
         android:layout_toRightOf="@+id/rg_pel">
 
         <RadioButton

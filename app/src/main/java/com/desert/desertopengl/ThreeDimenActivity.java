@@ -8,10 +8,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.desert.desertopengl.constant.Constants;
-import com.desert.desertopengl.graph.abbr.Cone;
-import com.desert.desertopengl.graph.abbr.Cube;
-import com.desert.desertopengl.graph.abbr.Cylinder;
-import com.desert.desertopengl.graph.abbr.Earth;
+import com.desert.desertopengl.graph.dimensional.three.Cone;
+import com.desert.desertopengl.graph.dimensional.three.Cube;
+import com.desert.desertopengl.graph.dimensional.three.Cylinder;
+import com.desert.desertopengl.graph.dimensional.three.Earth;
 import com.desert.desertopengl.interfaces.IDrawAbbr;
 import com.desert.desertopengl.view.GLSLView;
 
@@ -19,7 +19,7 @@ import com.desert.desertopengl.view.GLSLView;
  * Created by desert on 2017/12/26
  */
 
-public class AbbrActivity extends AppCompatActivity implements IDrawAbbr {
+public class ThreeDimenActivity extends AppCompatActivity implements IDrawAbbr {
     private GLSLView mGLSLView;
     private Cube mCube;
     private Cylinder mCylinder;

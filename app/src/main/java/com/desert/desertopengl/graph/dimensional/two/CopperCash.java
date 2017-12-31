@@ -1,4 +1,4 @@
-package com.desert.desertopengl;
+package com.desert.desertopengl.graph.dimensional.two;
 
 import com.desert.desertopengl.utils.OpenGLUtils;
 

@@ -59,12 +59,12 @@ public class Image extends ShaderUtil {
         //使用某套 着色器程序
         GLES20.glUseProgram(mProgram);
         //设置变化矩阵（旋转）
-        Matrix.translateM(mChangeMatrix, 0, 0, 0, -3);
+        Matrix.translateM(mMMatrix, 0, 0, 0, -3);
         // Matrix.setRotateM(mChangeMatrix, 0, 90, 1, 0, 0);
-        Matrix.setRotateM(mChangeMatrix, 0, 0, 0, 1, 0);
+        Matrix.setRotateM(mMMatrix, 0, 0, 0, 1, 0);
 
         //给着色器传变量值
-        GLES20.glUniformMatrix4fv(uMVPMatrix, 1, false, getMatrix(mChangeMatrix), 0);
+        GLES20.glUniformMatrix4fv(uMVPMatrix, 1, false, getMatrix(mMMatrix), 0);
         //设置顶点数据 normalized是否归一化
         GLES20.glVertexAttribPointer(aPosition, 3, GLES20.GL_FLOAT, false, 0, verBuffer);
         //设置颜色顶点数据 normalized是否归一化

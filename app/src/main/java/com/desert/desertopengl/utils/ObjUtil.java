@@ -5,27 +5,117 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by desert on 2017/12/9
  */
 
-public class ShaderUtil {
+public class ObjUtil {
+    public FloatBuffer verBuffer, norBuffer;
     private static final String TAG = "ShaderUtil";
     //4*4的投影矩阵
     public static float[] mProMatrix = new float[16];
     //4*4的相机矩阵
-    public static float[] mVMatrix = new float[16];
+    public static float[] mCameraMatrix = new float[16];
     //总变换矩阵(最后起作用给着色器程序的矩阵)
     public static float[] mMVPMatrix;
     //变换矩阵（旋转、平移、缩放）
-    public static float[] mMMatrix = new float[16];
+    public static float[] mChangeMatrix = new float[16];
+    public int vCount;
+
+    public float[] getUnitMatrix() {
+        return new float[]{
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+        };
+    }
+
+    public void readObjFile(InputStream stream) {
+        List<Float> mListVer = new ArrayList<>();//保存顶点坐标
+        List<Float> mListVerRes = new ArrayList<>();//保存最终顶点坐标
+        List<Float> mListNormal = new ArrayList<>();//保存顶点法向量坐标
+        float[] ab = new float[3], bc = new float[3], nor = new float[3];
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                String[] temps = line.split("[ ]+");
+                if (temps[0].equals("v")) {//顶点xyz
+                    mListVer.add(Float.parseFloat(temps[1]));
+                    mListVer.add(Float.parseFloat(temps[2]));
+                    mListVer.add(Float.parseFloat(temps[3]));
+                } else if (temps[0].equals("f")) {//面 顶点索引 从1开始
+                    int a = Integer.parseInt(temps[1]) - 1;
+                    int b = Integer.parseInt(temps[2]) - 1;
+                    int c = Integer.parseInt(temps[3]) - 1;
+                    int d = Integer.parseInt(temps[4]) - 1;
+                    //存储顶点
+                    mListVerRes.add(mListVer.get(a * 3));
+                    mListVerRes.add(mListVer.get(a * 3 + 1));
+                    mListVerRes.add(mListVer.get(a * 3 + 2));
+
+                    mListVerRes.add(mListVer.get(b * 3));
+                    mListVerRes.add(mListVer.get(b * 3 + 1));
+                    mListVerRes.add(mListVer.get(b * 3 + 2));
+
+                    mListVerRes.add(mListVer.get(c * 3));
+                    mListVerRes.add(mListVer.get(c * 3 + 1));
+                    mListVerRes.add(mListVer.get(c * 3 + 2));
+
+                    mListVerRes.add(mListVer.get(a * 3));
+                    mListVerRes.add(mListVer.get(a * 3 + 1));
+                    mListVerRes.add(mListVer.get(a * 3 + 2));
+
+                    mListVerRes.add(mListVer.get(c * 3));
+                    mListVerRes.add(mListVer.get(c * 3 + 1));
+                    mListVerRes.add(mListVer.get(c * 3 + 2));
+
+                    mListVerRes.add(mListVer.get(d * 3));
+                    mListVerRes.add(mListVer.get(d * 3 + 1));
+                    mListVerRes.add(mListVer.get(d * 3 + 2));
+                    //法向量怎么来算？
+                    //abc三个空间点，法向量为向量AB与向量BC的外积
+                    //向量AB与向量BC
+                    for (int i = 0; i < 3; i++) {
+                        ab[i] = mListVer.get(a * 3 + i) - mListVer.get(b * 3 + i);
+                        bc[i] = mListVer.get(b * 3 + i) - mListVer.get(c * 3 + i);
+                    }
+                    //法向量 xyz
+                    nor[0] = ab[1] * bc[2] - ab[2] * bc[1];
+                    nor[1] = ab[2] * bc[0] - ab[0] * bc[2];
+                    nor[2] = ab[0] * bc[1] - ab[1] * bc[0];
+                    for (int i = 0; i < 6; i++) {
+                        mListNormal.add(nor[0]);
+                        mListNormal.add(nor[1]);
+                        mListNormal.add(nor[2]);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        verBuffer = getFloatBuffer(mListVerRes);
+        vCount = mListVerRes.size() / 3;
+        norBuffer = getFloatBuffer(mListNormal);
+    }
 
     /**
      * 矩阵变化
@@ -38,7 +128,7 @@ public class ShaderUtil {
         Matrix.multiplyMM(
                 mMVPMatrix, //总变换矩阵
                 0, //总变换矩阵的起始索引
-                mVMatrix, //照相机位置
+                mCameraMatrix, //照相机位置
                 0,//照相机朝向起始索引
                 spec, //投影变换矩阵
                 0);
@@ -180,6 +270,20 @@ public class ShaderUtil {
         intBuffer.put(buffer);//向缓冲区中放入数据
         intBuffer.position(0);//设置缓冲区的起始位置
         return intBuffer;
+    }
+
+    public FloatBuffer getFloatBuffer(List<Float> data) {
+        //由于不同平台字节顺序不同，数据单元不是字节的
+        //一定要经过ByteBuffer转换，关键是通过ByteBuffer设置nativeOrder
+        ByteBuffer bbf = ByteBuffer.allocateDirect(data.size() * 4);
+        bbf.order(ByteOrder.nativeOrder());//设置这个字节缓冲的字节顺序为本地平台的字节顺序
+        FloatBuffer floatBuffer = bbf.asFloatBuffer();//转换为Float型缓冲
+        for (int i = 0; i < data.size(); i++) {
+            floatBuffer.put(data.get(i));
+        }
+        //floatBuffer.put(buffer);//向缓冲区中放入数据
+        floatBuffer.position(0);//设置缓冲区的起始位置
+        return floatBuffer;
     }
 
     public ByteBuffer getByteBuffer(byte[] buffer) {

@@ -1,4 +1,4 @@
-package com.desert.desertopengl.graph.abbr;
+package com.desert.desertopengl.graph.dimensional.three;
 
 import android.content.Context;
 import android.opengl.GLES20;
@@ -68,23 +68,24 @@ public class Cube extends ShaderUtil {
         String fragSource = loadFromAssetsFile("frag.glsl", mContext.getResources());
         mProgram = createProgram(verSource, fragSource);
         //获取程序（着色器）中顶点位置（XYZ 引用的id）
-        aPosition = GLES20.glGetAttribLocation(mProgram, "aPosition");
+        aPosition = GLES20.glGetAttribLocation(mProgram, "vPosition");
         //获取程序（着色器）中顶点颜色位置(RGB A引用的id)
-        aColor = GLES20.glGetAttribLocation(mProgram, "aColor");
+        aColor = GLES20.glGetAttribLocation(mProgram, "vColor");
         //获取程序（着色器） 总变换矩阵的id
-        uMVPMatrix = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
+        uMVPMatrix = GLES20.glGetUniformLocation(mProgram, "vMVPMatrix");
     }
 
     public void drawSelf() {
         //使用某套 着色器程序
         GLES20.glUseProgram(mProgram);
+        //初始化矩阵
+        Matrix.setRotateM(mMMatrix, 0, 0, 0, 1, 0);
+        Matrix.translateM(mMMatrix, 0, 0, 0, -2);
         //设置变化矩阵（旋转）
-        //Matrix.setRotateM(mChangeMatrix, 0, 0, 0, 1, 0);
-        Matrix.translateM(mChangeMatrix, 0, 0, 0, -5);
-        Matrix.setRotateM(mChangeMatrix, 0, angle, 1, 1, 1);
+        Matrix.rotateM(mMMatrix, 0, angle, 1, 1, 1);
 
         //给着色器传变量值
-        GLES20.glUniformMatrix4fv(uMVPMatrix, 1, false, getMatrix(mChangeMatrix), 0);
+        GLES20.glUniformMatrix4fv(uMVPMatrix, 1, false, getMatrix(mMMatrix), 0);
         //设置顶点数据 normalized是否归一化
         GLES20.glVertexAttribPointer(aPosition, 3, GLES20.GL_FLOAT, false, 0, verBuffer);
         //设置颜色顶点数据 normalized是否归一化

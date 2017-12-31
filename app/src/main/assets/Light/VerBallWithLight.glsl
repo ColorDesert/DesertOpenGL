@@ -13,7 +13,7 @@ vec4 pointLight(vec3 normal,vec3 lightLocation, vec4 lightDiffuse){
 }
 void main() {
 gl_Position=vMatrix*vec4(vPosition,1);
-vec3 locstion=vec3(50,50,100);
+vec3 locstion=vec3(500,500,100);
 vec4 at=vec4(1.0,1.0,1.0,1.0);//光照强度
 vDiffuse=pointLight(normalize(vPosition),locstion,at);
 

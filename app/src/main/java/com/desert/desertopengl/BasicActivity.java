@@ -10,7 +10,6 @@ import android.view.View;
 
 import com.desert.desertopengl.adapter.BasicAdapter;
 import com.desert.desertopengl.callbacks.RecyclerItemClickListener;
-import com.desert.desertopengl.constant.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,25 +30,32 @@ public class BasicActivity extends AppCompatActivity implements RecyclerItemClic
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mList = new ArrayList<>();
-        mList.add("Point");
-        mList.add("Line");
-        mList.add("Triangle");
+        mList.add("基本图元");
+        mList.add("2D图形");
+        mList.add("3D图形");
+        mList.add("Obj模型");
         mRecyclerView.setAdapter(new BasicAdapter(this, mList));
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, this));
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        Intent intent = new Intent(this, BasicPelActivity.class);
+        Intent intent;
         switch (position) {
             case 0:
-                intent.putExtra(Constants.EVENT_BASIC_GRAPH_TYPE, Constants.BASIC_PEL_POINT);
+                intent = new Intent(this, BasicPelActivity.class);
                 break;
             case 1:
-                intent.putExtra(Constants.EVENT_BASIC_GRAPH_TYPE, Constants.BASIC_PEL_LINE);
+                intent = new Intent(this, TwoDimenActivity.class);
                 break;
             case 2:
-                intent.putExtra(Constants.EVENT_BASIC_GRAPH_TYPE, Constants.BASIC_PEL_TRIANGLE);
+                intent = new Intent(this, ThreeDimenActivity.class);
+                break;
+            case 3:
+                intent = new Intent(this, ObjActivity.class);
+                break;
+            default:
+                intent = new Intent(this, BasicPelActivity.class);
                 break;
         }
         startActivity(intent);

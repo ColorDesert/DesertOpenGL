@@ -1,4 +1,4 @@
-package com.desert.desertopengl;
+package com.desert.desertopengl.graph.dimensional.two;
 
 import com.desert.desertopengl.utils.OpenGLUtils;
 
@@ -11,12 +11,12 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by desert on 2017/12/3
  */
 
-public class StripTriangles extends OpenGLUtils {
+public class AreOctagon extends OpenGLUtils {
     private IntBuffer colorBuffer;
     private FloatBuffer verBuffer;
     private int vCount;
 
-    public StripTriangles() {
+    public AreOctagon() {
         init();
     }
 
@@ -46,8 +46,8 @@ public class StripTriangles extends OpenGLUtils {
         int[] color = new int[4 * vCount];
         for (int i = 0; i < vCount; i++) {
             color[count++] = one;
-            color[count++] = one;
             color[count++] = 0;
+            color[count++] = one;
             color[count++] = 0;
         }
         //创建顶点颜色缓冲数据
