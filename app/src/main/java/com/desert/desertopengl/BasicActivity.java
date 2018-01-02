@@ -34,6 +34,7 @@ public class BasicActivity extends AppCompatActivity implements RecyclerItemClic
         mList.add("2D图形");
         mList.add("3D图形");
         mList.add("Obj模型");
+        mList.add("飘动效果");
         mRecyclerView.setAdapter(new BasicAdapter(this, mList));
         mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, this));
     }
@@ -53,6 +54,9 @@ public class BasicActivity extends AppCompatActivity implements RecyclerItemClic
                 break;
             case 3:
                 intent = new Intent(this, ObjActivity.class);
+                break;
+            case 4:
+                intent = new Intent(this, EffectActivity.class);
                 break;
             default:
                 intent = new Intent(this, BasicPelActivity.class);

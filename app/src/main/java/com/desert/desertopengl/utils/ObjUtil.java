@@ -52,11 +52,11 @@ public class ObjUtil {
         try {
             while ((line = reader.readLine()) != null) {
                 String[] temps = line.split("[ ]+");
-                if (temps[0].equals("v")) {//顶点xyz
+                if (temps[0].trim().equals("v")) {//顶点xyz
                     mListVer.add(Float.parseFloat(temps[1]));
                     mListVer.add(Float.parseFloat(temps[2]));
                     mListVer.add(Float.parseFloat(temps[3]));
-                } else if (temps[0].equals("f")) {//面 顶点索引 从1开始
+                } else if (temps[0].trim().equals("f")) {//面 顶点索引 从1开始
                     int a = Integer.parseInt(temps[1]) - 1;
                     int b = Integer.parseInt(temps[2]) - 1;
                     int c = Integer.parseInt(temps[3]) - 1;

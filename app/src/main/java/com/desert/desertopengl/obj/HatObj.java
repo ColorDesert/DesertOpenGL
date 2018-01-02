@@ -41,7 +41,6 @@ public class HatObj extends ObjUtil {
 
     public void drawSelf() {
         GLES20.glUseProgram(mProgram);
-        GLES20.glUseProgram(mProgram);
         GLES20.glUniformMatrix4fv(mHMatrix, 1, false, mMVPMatrix, 0);
         GLES20.glEnableVertexAttribArray(mHPosition);
         GLES20.glVertexAttribPointer(mHPosition, 3, GLES20.GL_FLOAT, false, 3 * 4, verBuffer);
