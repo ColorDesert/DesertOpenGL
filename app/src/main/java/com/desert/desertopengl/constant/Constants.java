@@ -17,4 +17,7 @@ public class Constants {
     public static final int TWO_DIMENSIONAl_COPPER_LINE = 2009;
     public static final int TWO_DIMENSIONAL_COPPER = 2010;
     public static final int TWO_DIMENSIONAL_ARE_OCTAGON = 2011;
+    public static final int TYPE_TEXTURE_BASE = 2012;
+    public static final int TYPE_TEXTURE_PYRAMID = 2013;
+    public static final int TYPE_TEXTURE_EARTH = 2014;
 }

@@ -33,6 +33,7 @@ public class BasicActivity extends AppCompatActivity implements RecyclerItemClic
         mList.add("基本图元");
         mList.add("2D图形");
         mList.add("3D图形");
+        mList.add("纹理和光照");
         mList.add("Obj模型");
         mList.add("飘动效果");
         mRecyclerView.setAdapter(new BasicAdapter(this, mList));
@@ -53,9 +54,12 @@ public class BasicActivity extends AppCompatActivity implements RecyclerItemClic
                 intent = new Intent(this, ThreeDimenActivity.class);
                 break;
             case 3:
-                intent = new Intent(this, ObjActivity.class);
+                intent = new Intent(this, TextureActivity.class);
                 break;
             case 4:
+                intent = new Intent(this, ObjActivity.class);
+                break;
+            case 5:
                 intent = new Intent(this, EffectActivity.class);
                 break;
             default:

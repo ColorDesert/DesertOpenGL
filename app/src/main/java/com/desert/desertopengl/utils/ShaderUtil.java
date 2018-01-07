@@ -1,8 +1,13 @@
 package com.desert.desertopengl.utils;
 
+import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 import android.opengl.Matrix;
+import android.support.annotation.DrawableRes;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -187,5 +192,45 @@ public class ShaderUtil {
         byteBuffer.put(buffer);//向缓冲区中放入数据
         byteBuffer.position(0);//设置缓冲区的起始位置
         return byteBuffer;
+    }
+
+    public int initTexture(Context context, @DrawableRes int id) {
+        //生成纹理id
+        int[] textures = new int[1];
+        GLES20.glGenTextures(1,//生成纹理id的个数
+                textures,//纹理id数组
+                0);
+        int textureId = textures[0];
+        //绑定纹理
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+        //设置过滤器
+
+        //纹理过滤函数 glTexParameterf(要操作的纹理类型，过滤器，过滤参数)
+        //要操作的纹理类型:GLES20.GL_TEXTURE_2D,GLES20.GL_TEXTURE_1D,GLES20.GL_TEXTURE_3D
+        //过滤器
+        // GLES20.GL_TEXTURE_MIN_FILTER指定缩小滤波的方法
+        //GLES20.GL_TEXTURE_MAG_FILTER指定放大滤波的方法
+        // 参数：
+        //GLES20.GL_NEARE(最邻近过滤，获得靠近纹理坐标点像素)
+        //GLES20.GL_LINEA(线性插值，获取坐标点附近4个像素的加权平均值)
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        //纹理环绕glTexParameterf( 要操作的纹理类型, 环绕方向,环绕参数 )
+        //环绕方向:STR
+        //环绕参数:
+        //1.GL_CLAMP_TO_EDGE:超出纹理范围的坐标被截取城0和1，形成纹理边缘延展效果
+        //2.GL_REPEA:超出纹理范围的坐标，超出部分形成重复使用
+        //3.GL_MIRRORED_REPEAT 倒影
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        //加载图片
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), id);
+        //加载纹理
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D,//纹理类型
+                0,//纹理层次，0表示基本的图像层
+                bitmap,//纹理图像
+                0//纹理边框尺寸
+        );
+        return textureId;
     }
 }

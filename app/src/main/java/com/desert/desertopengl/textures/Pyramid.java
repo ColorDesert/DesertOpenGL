@@ -1,9 +1,10 @@
 package com.desert.desertopengl.textures;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.view.View;
 
+import com.desert.desertopengl.R;
 import com.desert.desertopengl.utils.ShaderUtil;
 
 import java.nio.ByteBuffer;
@@ -17,14 +18,16 @@ public class Pyramid extends ShaderUtil {
 
     private FloatBuffer verBuffer, texBuffer;
     private ByteBuffer indexBuffer;
-    private View mView;
+    private Context mContext;
     private int mProgram, aPosition, aTexture, uMVPMatrix;
     private int angle = 0;
     private int vCount;
+    private int textureId;
 
-    public Pyramid(View view) {
-        mView = view;
+    public Pyramid(Context context) {
+        mContext = context;
         initData();
+        textureId = initTexture(context, R.drawable.jin);
         initShader();
     }
 
@@ -40,10 +43,10 @@ public class Pyramid extends ShaderUtil {
         verBuffer = getFloatBuffer(ver);
         float tex[] = new float[]{
                 0.0f, 0.0f,
-                0.25f, 1.0f,
-                0.5f, 0.0f,
-                0.75f, 1.0f,
-                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
 //                0.5f, 0,
 //                0, 1.5f,
 //                1.5f, 1.5f
@@ -61,8 +64,8 @@ public class Pyramid extends ShaderUtil {
     }
 
     private void initShader() {
-        String verSource = loadFromAssetsFile("pyramid/ver.glsl", mView.getResources());
-        String fragSource = loadFromAssetsFile("pyramid/frag.glsl", mView.getResources());
+        String verSource = loadFromAssetsFile("pyramid/ver.glsl", mContext.getResources());
+        String fragSource = loadFromAssetsFile("pyramid/frag.glsl", mContext.getResources());
         mProgram = createProgram(verSource, fragSource);
         //获取程序（着色器）中顶点位置（XYZ 引用的id）
         aPosition = GLES20.glGetAttribLocation(mProgram, "vPosition");
@@ -73,12 +76,12 @@ public class Pyramid extends ShaderUtil {
     }
 
 
-    public void drawSelf(int textureID) {
+    public void drawSelf() {
         //使用某套 着色器程序
         GLES20.glUseProgram(mProgram);
         //设置变化矩阵（旋转）
         Matrix.translateM(mMMatrix, 0, 0, 0, -1);
-       // Matrix.setRotateM(mChangeMatrix, 0, 90, 1, 0, 0);
+        // Matrix.setRotateM(mChangeMatrix, 0, 90, 1, 0, 0);
         Matrix.setRotateM(mMMatrix, 0, angle, 0, 1, 0);
 
         //给着色器传变量值
@@ -92,7 +95,7 @@ public class Pyramid extends ShaderUtil {
         GLES20.glEnableVertexAttribArray(aTexture);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
         //绘制三角形
         //GLES20.glDrawArrays(GLES20.GL_TRIANGLE_FAN, 0, vCount);
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, 18, GLES20.GL_UNSIGNED_BYTE, indexBuffer);
@@ -102,4 +105,5 @@ public class Pyramid extends ShaderUtil {
         angle += 1;
 
     }
+
 }

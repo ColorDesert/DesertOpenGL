@@ -1,9 +1,10 @@
 package com.desert.desertopengl.picture;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
-import android.view.View;
 
+import com.desert.desertopengl.R;
 import com.desert.desertopengl.utils.ShaderUtil;
 
 import java.nio.FloatBuffer;
@@ -14,13 +15,15 @@ import java.nio.FloatBuffer;
 
 public class Image extends ShaderUtil {
     private FloatBuffer verBuffer, coorBuffer;
-    private View mView;
+    private Context mContext;
     private int mProgram, aPosition, aTexture, uMVPMatrix;
     private int vCount;
+    private int textureId;
 
-    public Image(View view) {
-        mView = view;
+    public Image(Context context) {
+        mContext = context;
         initData();
+        textureId=initTexture(context,R.drawable.xiaohua);
         initShader();
     }
 
@@ -43,8 +46,8 @@ public class Image extends ShaderUtil {
     }
 
     private void initShader() {
-        String verSource = loadFromAssetsFile("texVer.glsl", mView.getResources());
-        String fragSource = loadFromAssetsFile("texFrag.glsl", mView.getResources());
+        String verSource = loadFromAssetsFile("texVer.glsl", mContext.getResources());
+        String fragSource = loadFromAssetsFile("texFrag.glsl", mContext.getResources());
         mProgram = createProgram(verSource, fragSource);
         //获取程序（着色器）中顶点位置（XYZ 引用的id）
         aPosition = GLES20.glGetAttribLocation(mProgram, "vPosition");
@@ -55,7 +58,7 @@ public class Image extends ShaderUtil {
     }
 
 
-    public void drawSelf(int textureID) {
+    public void drawSelf() {
         //使用某套 着色器程序
         GLES20.glUseProgram(mProgram);
         //设置变化矩阵（旋转）
@@ -74,7 +77,7 @@ public class Image extends ShaderUtil {
         GLES20.glEnableVertexAttribArray(aTexture);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureID);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
         //绘制三角形
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0,4);
         GLES20.glDisableVertexAttribArray(aPosition);
